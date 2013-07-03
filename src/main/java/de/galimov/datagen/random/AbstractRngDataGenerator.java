@@ -5,7 +5,7 @@ import java.util.Random;
 import de.galimov.datagen.basic.AbstractDataGenerator;
 
 public abstract class AbstractRngDataGenerator<T> extends AbstractDataGenerator<T> {
-    private Random random = new Random();
+    private Random random = new Random(0);
 
     @Override
     public void setSeed(long seed) {

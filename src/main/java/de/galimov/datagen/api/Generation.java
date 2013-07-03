@@ -58,4 +58,40 @@ public class Generation {
     public static <T> T value(T value) {
         return generated(new ConstantGenerator<T>(Object.class, value));
     }
+
+    public static <T> ConstantGenerator<T> constant(T value) {
+        return new ConstantGenerator<T>(Object.class, value);
+    }
+
+    public static ConstantGenerator<Integer> constant(int value) {
+        return new ConstantGenerator<Integer>(Integer.class, value);
+    }
+
+    public static ConstantGenerator<Long> constant(long value) {
+        return new ConstantGenerator<Long>(Long.class, value);
+    }
+
+    public static ConstantGenerator<Double> constant(double value) {
+        return new ConstantGenerator<Double>(Double.class, value);
+    }
+
+    public static ConstantGenerator<Float> constant(float value) {
+        return new ConstantGenerator<Float>(Float.class, value);
+    }
+
+    public static ConstantGenerator<Boolean> constant(boolean value) {
+        return new ConstantGenerator<Boolean>(Boolean.class, value);
+    }
+
+    public static ConstantGenerator<Short> constant(short value) {
+        return new ConstantGenerator<Short>(Short.class, value);
+    }
+
+    public static ConstantGenerator<Byte> constant(byte value) {
+        return new ConstantGenerator<Byte>(Byte.class, value);
+    }
+
+    public static ConstantGenerator<Character> constant(char value) {
+        return new ConstantGenerator<Character>(Character.class, value);
+    }
 }
