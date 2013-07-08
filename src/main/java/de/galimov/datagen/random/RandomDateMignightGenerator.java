@@ -8,9 +8,15 @@ import org.joda.time.ReadablePeriod;
 import de.galimov.datagen.api.DataGenerator;
 import de.galimov.datagen.basic.AbstractTransformationGenerator;
 
+import static de.galimov.datagen.api.Generation.constant;
+
 public class RandomDateMignightGenerator extends AbstractRngDataGenerator<DateMidnight> {
     private final DataGenerator<? extends ReadableInstant> start;
     private final DataGenerator<? extends ReadableInstant> end;
+
+    public RandomDateMignightGenerator(ReadableInstant start, ReadableInstant end) {
+        this(constant(start), constant(end));
+    }
 
     public RandomDateMignightGenerator(DataGenerator<? extends ReadableInstant> start, DataGenerator<? extends ReadableInstant> end) {
         this.start = start;
@@ -20,6 +26,10 @@ public class RandomDateMignightGenerator extends AbstractRngDataGenerator<DateMi
         registerChildGenerator(end);
 
         setGeneratedClass(DateMidnight.class);
+    }
+
+    public RandomDateMignightGenerator(ReadableInstant start, final ReadablePeriod period) {
+        this(constant(start), period);
     }
 
     public RandomDateMignightGenerator(final DataGenerator<? extends ReadableInstant> start, final ReadablePeriod period) {

@@ -131,7 +131,7 @@ public class GeneratorTest {
 
         on(generator).setT(value(new TestClass()));
         on(generator).getT().setX(value(3));
-        on(generator).getT().setY(generated(new RandomLongGenerator(new ConstantGenerator<Long>(1L), new ConstantGenerator<Long>(5L))));
+        on(generator).getT().setY(generated(new RandomLongGenerator(1L, 5L)));
 
         TestClass generatedObject = generator.generate();
         assertEquals(3, generatedObject.getT().getX());
@@ -189,7 +189,7 @@ public class GeneratorTest {
         DataGenerator<TestClass> generator2 = new NewInstanceGenerator<TestClass>(TestClass.class);
 
         on(generator1).setX(value(3));
-        on(generator1).setY(generated(new RandomLongGenerator(new ConstantGenerator<Long>(1L), new ConstantGenerator<Long>(5L))));
+        on(generator1).setY(generated(new RandomLongGenerator(1L, 5L)));
 
         on(generator2).setT(generated(generator1));
 
@@ -204,7 +204,7 @@ public class GeneratorTest {
         DataGenerator<TestClass> generator2 = new NewInstanceGenerator<TestClass>(TestClass.class);
 
         on(generator1).setX(value(3));
-        on(generator1).setAndReturnY(generated(new RandomLongGenerator(new ConstantGenerator<Long>(1L), new ConstantGenerator<Long>(5L))));
+        on(generator1).setAndReturnY(generated(new RandomLongGenerator(1L, 5L)));
 
         on(generator2).setAndReturnT(generated(generator1));
 

@@ -4,6 +4,8 @@ import java.util.Random;
 
 import de.galimov.datagen.api.DataGenerator;
 
+import static de.galimov.datagen.api.Generation.constant;
+
 public class RandomLongGenerator extends AbstractRngDataGenerator<Long> {
     private final DataGenerator<Long> minValue;
     private final DataGenerator<Long> maxValue;
@@ -20,6 +22,10 @@ public class RandomLongGenerator extends AbstractRngDataGenerator<Long> {
         registerChildGenerator(maxValue);
 
         setGeneratedClass(Long.class);
+    }
+
+    public RandomLongGenerator(Long minValue, Long maxValue) {
+        this(constant(minValue), constant(maxValue));
     }
 
     @Override

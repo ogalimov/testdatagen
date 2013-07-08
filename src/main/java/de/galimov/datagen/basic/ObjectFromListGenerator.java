@@ -4,10 +4,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ObjectFromListGenerator<T> extends AbstractDataGenerator<T> {
-    private final List<T> source;
-    private Iterator<T> iterator;
+    private final List<? extends T> source;
+    private Iterator<? extends T> iterator;
 
-    public ObjectFromListGenerator(List<T> source) {
+    public ObjectFromListGenerator(List<? extends T> source) {
         this.source = source;
         iterator = source.iterator();
     }
