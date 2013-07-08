@@ -11,6 +11,7 @@ import de.galimov.datagen.recording.OngoingRecordingHolder;
 
 public abstract class AbstractDataGenerator<T> implements DataGenerator<T> {
     private T value;
+    private boolean attached = false;
 
     private final List<DataGenerator<?>> childGenerators = new LinkedList<DataGenerator<?>>();
     private final List<GenerationStep<T>> generationSteps = new LinkedList<GenerationStep<T>>();
@@ -24,6 +25,7 @@ public abstract class AbstractDataGenerator<T> implements DataGenerator<T> {
         }
 
         value = null;
+        attached = false;
         generators.add(this);
 
         for (DataGenerator<?> childGenerator : childGenerators) {
@@ -37,12 +39,13 @@ public abstract class AbstractDataGenerator<T> implements DataGenerator<T> {
 
     @Override
     public T getValue() {
-        if (value == null) {
+        if (!attached) {
             OngoingRecordingHolder.endRecordingForGeneratorIfItIsCurrent(this);
             value = generateInternal();
             for (GenerationStep<T> generationStep : generationSteps) {
                 value = generationStep.apply(value);
             }
+            attached = true;
         }
 
         return value;

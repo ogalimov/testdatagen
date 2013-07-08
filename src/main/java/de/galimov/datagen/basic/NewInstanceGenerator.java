@@ -6,7 +6,7 @@ package de.galimov.datagen.basic;
  * Will throw a RuntimeException if the Class doesn't have such a constructor.
  */
 public class NewInstanceGenerator<T> extends AbstractDataGenerator<T> {
-    public NewInstanceGenerator(Class<T> clazz) {
+    public NewInstanceGenerator(Class<? extends T> clazz) {
         super();
         setGeneratedClass(clazz);
     }

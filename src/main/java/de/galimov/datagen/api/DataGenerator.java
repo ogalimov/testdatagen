@@ -1,8 +1,9 @@
 package de.galimov.datagen.api;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public interface DataGenerator<T> {
+public interface DataGenerator<T> extends Serializable {
     void newGenerationCycle(Set<DataGenerator<?>> generators);
 
     T getValue();
