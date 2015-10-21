@@ -1,20 +1,16 @@
 package de.galimov.datagen;
 
-import static de.galimov.datagen.api.Generation.generated;
-import static de.galimov.datagen.api.Generation.on;
-import static de.galimov.datagen.api.Generation.value;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import de.galimov.datagen.api.DataGenerator;
 import de.galimov.datagen.basic.AbstractGenerationStep;
-import de.galimov.datagen.basic.ConstantGenerator;
 import de.galimov.datagen.basic.NewCycleStep;
 import de.galimov.datagen.basic.NewInstanceGenerator;
 import de.galimov.datagen.random.RandomLongGenerator;
 import de.galimov.datagen.serial.SerialLongGenerator;
+import org.junit.Test;
+
+import static de.galimov.datagen.api.Generation.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GeneratorTest {
     public static class TestClass {
@@ -86,7 +82,7 @@ public class GeneratorTest {
 
     @Test
     public void testSingleArgumentManual() {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
 
         generator.add(new AbstractGenerationStep<TestClass>() {
             @Override
@@ -104,7 +100,7 @@ public class GeneratorTest {
 
     @Test
     public void testSingleArgument() {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
 
         on(generator).setX(value(3));
         on(generator).setY(value(5L));
@@ -116,7 +112,7 @@ public class GeneratorTest {
 
     @Test
     public void testMultiArgument() {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
 
         on(generator).setCoordinates(value(3), value(5L));
 
@@ -127,7 +123,7 @@ public class GeneratorTest {
 
     @Test
     public void testChaining() {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
 
         on(generator).setT(value(new TestClass()));
         on(generator).getT().setX(value(3));
@@ -140,7 +136,7 @@ public class GeneratorTest {
 
     @Test
     public void testInlineChaining() {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
 
         on(generator).setT(value(new TestClass()));
         on(generator).getT().setT(generated(randomInlineTGenerator(3, false)));
@@ -151,7 +147,7 @@ public class GeneratorTest {
 
     @Test
     public void testRecursiveInlineChaining() {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
 
         on(generator).setT(value(new TestClass()));
         on(generator).getT().setT(generated(randomInlineTGenerator(3, true)));
@@ -163,7 +159,7 @@ public class GeneratorTest {
 
     @Test
     public void testDoubleRecursiveInlineChaining() {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
 
         on(generator).setT(value(new TestClass()));
         on(generator).getT().setTAndT2(generated(randomInlineTGenerator(3, true)), generated(randomInlineTGenerator(2, true)));
@@ -175,7 +171,7 @@ public class GeneratorTest {
     }
 
     private DataGenerator<TestClass> randomInlineTGenerator(int xValue, boolean recursive) {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
         on(generator).setX(value(xValue));
         if (recursive) {
             on(generator).setAndReturnT(generated(randomInlineTGenerator(xValue, false)));
@@ -185,8 +181,8 @@ public class GeneratorTest {
 
     @Test
     public void testRecursiveChaining() {
-        DataGenerator<TestClass> generator1 = new NewInstanceGenerator<TestClass>(TestClass.class);
-        DataGenerator<TestClass> generator2 = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator1 = new NewInstanceGenerator<>(TestClass.class);
+        DataGenerator<TestClass> generator2 = new NewInstanceGenerator<>(TestClass.class);
 
         on(generator1).setX(value(3));
         on(generator1).setY(generated(new RandomLongGenerator(1L, 5L)));
@@ -200,8 +196,8 @@ public class GeneratorTest {
 
     @Test
     public void testNonVoidMethod() {
-        DataGenerator<TestClass> generator1 = new NewInstanceGenerator<TestClass>(TestClass.class);
-        DataGenerator<TestClass> generator2 = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator1 = new NewInstanceGenerator<>(TestClass.class);
+        DataGenerator<TestClass> generator2 = new NewInstanceGenerator<>(TestClass.class);
 
         on(generator1).setX(value(3));
         on(generator1).setAndReturnY(generated(new RandomLongGenerator(1L, 5L)));
@@ -215,7 +211,7 @@ public class GeneratorTest {
 
     @Test
     public void testSameGenerator() {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
         DataGenerator<Long> serialLongGenerator = new SerialLongGenerator(3L);
         on(generator).setY(generated(serialLongGenerator));
         on(generator).setZ(generated(serialLongGenerator));
@@ -227,10 +223,10 @@ public class GeneratorTest {
 
     @Test
     public void testSameGenerator_decoupledOnTargetGenerator() {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
         DataGenerator<Long> serialLongGenerator = new SerialLongGenerator(3L);
         on(generator).setY(generated(serialLongGenerator));
-        generator.add(new NewCycleStep<TestClass>(generator));
+        generator.add(new NewCycleStep<>(generator));
         on(generator).setZ(generated(serialLongGenerator));
 
         TestClass generatedObject = generator.generate();
@@ -240,10 +236,10 @@ public class GeneratorTest {
 
     @Test
     public void testSameGenerator_decoupledOnSourceGenerator() {
-        DataGenerator<TestClass> generator = new NewInstanceGenerator<TestClass>(TestClass.class);
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
         DataGenerator<Long> serialLongGenerator = new SerialLongGenerator(3L);
         on(generator).setY(generated(serialLongGenerator));
-        generator.add(new NewCycleStep<TestClass>(serialLongGenerator));
+        generator.add(new NewCycleStep<>(serialLongGenerator));
         on(generator).setZ(generated(serialLongGenerator));
 
         TestClass generatedObject = generator.generate();

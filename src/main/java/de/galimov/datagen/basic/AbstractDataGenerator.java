@@ -1,13 +1,15 @@
 package de.galimov.datagen.basic;
 
+import de.galimov.datagen.api.DataGenerator;
+import de.galimov.datagen.api.GenerationStep;
+import de.galimov.datagen.recording.OngoingRecordingHolder;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import de.galimov.datagen.api.DataGenerator;
-import de.galimov.datagen.api.GenerationStep;
-import de.galimov.datagen.recording.OngoingRecordingHolder;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public abstract class AbstractDataGenerator<T> implements DataGenerator<T> {
     private T value;
@@ -78,6 +80,28 @@ public abstract class AbstractDataGenerator<T> implements DataGenerator<T> {
     @Override
     public void add(GenerationStep<T> generationStep) {
         generationSteps.add(generationStep);
+    }
+
+    @Override
+    public void addFunc(Function<T, T> generationFunction) {
+        add(new GenerationStep<T>() {
+            @Override
+            public T apply(T object) {
+                return generationFunction.apply(object);
+            }
+
+            @Override
+            public void newGenerationCycle(Set<DataGenerator<?>> generators) {
+            }
+        });
+    }
+
+    @Override
+    public void addConsumer(Consumer<T> generationFunction) {
+        addFunc((t -> {
+            generationFunction.accept(t);
+            return t;
+        }));
     }
 
     protected abstract T generateInternal();
