@@ -1,10 +1,10 @@
 package de.galimov.datagen.api;
 
-import static de.galimov.datagen.recording.RecordingProxyCreator.createRecordingProxy;
-
 import de.galimov.datagen.basic.ConstantGenerator;
 import de.galimov.datagen.recording.OngoingRecordingHolder;
 import de.galimov.datagen.recording.RecordingHelperUtils;
+
+import static de.galimov.datagen.recording.RecordingProxyCreator.createRecordingProxy;
 
 public class Generation {
     @SuppressWarnings("unchecked")

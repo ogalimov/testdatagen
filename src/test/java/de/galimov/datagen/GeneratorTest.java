@@ -4,10 +4,14 @@ import de.galimov.datagen.api.DataGenerator;
 import de.galimov.datagen.basic.AbstractGenerationStep;
 import de.galimov.datagen.basic.NewCycleStep;
 import de.galimov.datagen.basic.NewInstanceGenerator;
+import de.galimov.datagen.basic.ObjectFromListGenerator;
 import de.galimov.datagen.random.RandomLongGenerator;
 import de.galimov.datagen.serial.SerialLongGenerator;
 import org.junit.Test;
 
+import java.util.Arrays;
+
+import static de.galimov.datagen.api.BindGeneration.bind;
 import static de.galimov.datagen.api.Generation.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -245,5 +249,55 @@ public class GeneratorTest {
         TestClass generatedObject = generator.generate();
         assertEquals(3, generatedObject.getY());
         assertEquals(4, generatedObject.getZ());
+    }
+
+    @Test
+    public void testFunctional_singleArgument() {
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
+        generator.addStepC(testClass -> testClass.setX(3));
+        generator.addStepC(testClass -> testClass.setY(4));
+
+        TestClass generatedObject = generator.generate();
+        assertEquals(3, generatedObject.getX());
+        assertEquals(4, generatedObject.getY());
+    }
+
+    @Test
+    public void testFunctional_generatorArgument() {
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
+        //on(generator).setX(generated(new ObjectFromListGenerator<>(Arrays.asList(3, 4))));
+        bind(generator, new ObjectFromListGenerator<>(Arrays.asList(3, 4))).addStepC(TestClass::setX);
+        generator.addStepC(testClass -> testClass.setY(4));
+
+        TestClass generatedObject = generator.generate();
+        assertEquals(3, generatedObject.getX());
+        assertEquals(4, generatedObject.getY());
+
+        TestClass generatedObject2 = generator.generate();
+        assertEquals(4, generatedObject2.getX());
+        assertEquals(4, generatedObject2.getY());
+    }
+
+    @Test
+    public void testFunctianalChaining() {
+        DataGenerator<TestClass> generator = new NewInstanceGenerator<>(TestClass.class);
+
+        ObjectFromListGenerator<Integer> objectFromListGenerator = new ObjectFromListGenerator<>(Arrays.asList(3, 4));
+
+/*      on(generator).setT(value(new TestClass()));
+        on(generator).getT().setX(value(3));
+        on(generator).getT().setY(generated(objectFromListGenerator));*/
+
+        generator.addStepC(testClass -> testClass.setT(new TestClass()));
+        generator.addStepC(testClass -> testClass.getT().setX(3));
+        bind(generator, objectFromListGenerator).addStepC((testClass, i) -> testClass.getT().setY(i));
+
+        TestClass generatedObject = generator.generate();
+        assertEquals(3, generatedObject.getT().getX());
+        assertEquals(3, generatedObject.getT().getY());
+
+        TestClass generatedObject2 = generator.generate();
+        assertEquals(3, generatedObject2.getT().getX());
+        assertEquals(4, generatedObject2.getT().getY());
     }
 }

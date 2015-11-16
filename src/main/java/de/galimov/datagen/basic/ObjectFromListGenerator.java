@@ -10,6 +10,11 @@ public class ObjectFromListGenerator<T> extends AbstractDataGenerator<T> {
     public ObjectFromListGenerator(List<? extends T> source) {
         this.source = source;
         iterator = source.iterator();
+
+        source.stream()
+                .filter(o -> o != null)
+                .findFirst()
+                .ifPresent(o -> setGeneratedClass(o.getClass()));
     }
 
     @Override

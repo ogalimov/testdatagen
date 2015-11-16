@@ -73,7 +73,7 @@ public abstract class AbstractDataGenerator<T> implements DataGenerator<T> {
     public void setSeed(long seed) {
     }
 
-    protected void registerChildGenerator(DataGenerator<?> dataGenerator) {
+    public void registerChildGenerator(DataGenerator<?> dataGenerator) {
         childGenerators.add(dataGenerator);
     }
 
@@ -83,7 +83,7 @@ public abstract class AbstractDataGenerator<T> implements DataGenerator<T> {
     }
 
     @Override
-    public void addFunc(Function<T, T> generationFunction) {
+    public void addStepF(Function<T, T> generationFunction) {
         add(new GenerationStep<T>() {
             @Override
             public T apply(T object) {
@@ -97,8 +97,8 @@ public abstract class AbstractDataGenerator<T> implements DataGenerator<T> {
     }
 
     @Override
-    public void addConsumer(Consumer<T> generationFunction) {
-        addFunc((t -> {
+    public void addStepC(Consumer<T> generationFunction) {
+        addStepF((t -> {
             generationFunction.accept(t);
             return t;
         }));

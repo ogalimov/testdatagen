@@ -18,11 +18,13 @@ public interface DataGenerator<T> extends Serializable {
 
     int getSize();
 
+    void registerChildGenerator(DataGenerator<?> dataGenerator);
+
     void setGeneratedClass(Class<?> generatedClass);
 
     void add(GenerationStep<T> generationStep);
 
-    void addFunc(Function<T, T> generationFunction);
+    void addStepF(Function<T, T> generationFunction);
 
-    void addConsumer(Consumer<T> generationFunction);
+    void addStepC(Consumer<T> generationFunction);
 }
