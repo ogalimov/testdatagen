@@ -4,10 +4,7 @@ import de.galimov.datagen.api.DataGenerator;
 import de.galimov.datagen.api.GenerationStep;
 import de.galimov.datagen.recording.OngoingRecordingHolder;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -71,6 +68,10 @@ public abstract class AbstractDataGenerator<T> implements DataGenerator<T> {
 
     @Override
     public void setSeed(long seed) {
+        Random random = new Random(seed);
+        for (DataGenerator<?> childGenerator : childGenerators) {
+            childGenerator.setSeed(random.nextInt());
+        }
     }
 
     public void registerChildGenerator(DataGenerator<?> dataGenerator) {

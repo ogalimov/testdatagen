@@ -35,6 +35,7 @@ public class ObjectFromListGenerator<T> extends AbstractDataGenerator<T> {
 
     @Override
     public void setSeed(long seed) {
+        super.setSeed(seed);
         iterator = source.listIterator((int) (seed  % source.size()));
     }
 
