@@ -4,7 +4,7 @@ import de.galimov.datagen.api.DataGenerator;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 import static de.galimov.datagen.api.Generation.constant;
 
@@ -29,8 +29,8 @@ public class RandomLocalDateGenerator extends AbstractRngDataGenerator<LocalDate
 
     @Override
     protected LocalDate generateInternal() {
-        int days = Period.between(start.getValue(), end.getValue()).getDays();
+        long days = ChronoUnit.DAYS.between(start.getValue(), end.getValue());
 
-        return start.getValue().plusDays(getRandom().nextInt(days));
+        return start.getValue().plusDays(getRandom().nextInt((int) days));
     }
 }
