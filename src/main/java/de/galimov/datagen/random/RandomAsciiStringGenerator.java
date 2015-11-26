@@ -1,7 +1,6 @@
 package de.galimov.datagen.random;
 
 import de.galimov.datagen.api.DataGenerator;
-import de.galimov.datagen.random.AbstractRngDataGenerator;
 
 import static de.galimov.datagen.api.Generation.constant;
 
@@ -32,7 +31,12 @@ public class RandomAsciiStringGenerator extends AbstractRngDataGenerator<String>
 
     @Override
     protected String generateInternal() {
-        int length = getRandom().nextInt(maxNumChars.getValue() - minNumChars.getValue()) + minNumChars.getValue();
+        int length;
+        if(maxNumChars.getValue() - minNumChars.getValue() > 0) {
+            length = getRandom().nextInt(maxNumChars.getValue() - minNumChars.getValue()) + minNumChars.getValue();
+        } else {
+            length = minNumChars.getValue();
+        }
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < length; i++) {
