@@ -105,5 +105,9 @@ public abstract class AbstractDataGenerator<T> implements DataGenerator<T> {
         }));
     }
 
+    protected List<DataGenerator<?>> getChildGenerators() {
+        return childGenerators;
+    }
+
     protected abstract T generateInternal();
 }
