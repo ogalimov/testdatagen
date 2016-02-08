@@ -2,7 +2,7 @@ package de.galimov.datagen.basic;
 
 /**
  * A Generator that generates new Objects, using a no argument constructor.
- * <p />
+ * <br>
  * Will throw a RuntimeException if the Class doesn't have such a constructor.
  */
 public class NewInstanceGenerator<T> extends AbstractDataGenerator<T> {
