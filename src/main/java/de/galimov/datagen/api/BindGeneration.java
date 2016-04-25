@@ -26,6 +26,7 @@ public class BindGeneration {
 
     public static <T, P1, P2> DelayedStep3<T, P1, P2> bind(DataGenerator<T> target, DataGenerator<P1> param1, DataGenerator<P2> param2) {
         target.registerChildGenerator(param1);
+        target.registerChildGenerator(param2);
         return new DelayedStep3<T, P1, P2>() {
             @Override
             public void addStepC(Consumer3<T, P1, P2> consumer) {
@@ -44,6 +45,8 @@ public class BindGeneration {
 
     public static <T, P1, P2, P3> DelayedStep4<T, P1, P2, P3> bind(DataGenerator<T> target, DataGenerator<P1> param1, DataGenerator<P2> param2, DataGenerator<P3> param3) {
         target.registerChildGenerator(param1);
+        target.registerChildGenerator(param2);
+        target.registerChildGenerator(param3);
         return new DelayedStep4<T, P1, P2, P3>() {
             @Override
             public void addStepC(Consumer4<T, P1, P2, P3> consumer) {
