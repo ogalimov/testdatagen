@@ -14,6 +14,8 @@ public class TransformingGenerator2<T1, T2, R> extends AbstractDataGenerator<R> 
         this.arg1 = arg1;
         this.arg2 = arg2;
         this.func = func;
+        this.registerChildGenerator(arg1);
+        this.registerChildGenerator(arg2);
     }
 
     @Override
