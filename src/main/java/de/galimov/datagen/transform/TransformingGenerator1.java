@@ -12,6 +12,7 @@ public class TransformingGenerator1<T, R> extends AbstractDataGenerator<R> {
     public TransformingGenerator1(DataGenerator<T> arg, Function<T, R> func) {
         this.arg = arg;
         this.func = func;
+        this.registerChildGenerator(arg);
     }
 
 
